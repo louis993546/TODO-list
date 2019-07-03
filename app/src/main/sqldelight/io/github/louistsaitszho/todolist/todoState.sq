@@ -1,0 +1,14 @@
+createTable:
+CREATE TABLE todoStateEntity(name TEXT NOT NULL PRIMARY KEY);
+
+selectAll:
+SELECT * FROM todoStateEntity;
+
+insertDefaultItems:
+INSERT INTO todoStateEntity(name) VALUES ("DONE"), ("NOT_DONE");
+
+doneID:
+SELECT ts.name FROM todoStateEntity AS ts WHERE ts.name="DONE";
+
+notDoneID:
+SELECT ts.name FROM todoStateEntity AS ts WHERE ts.name="NOT_DONE";
