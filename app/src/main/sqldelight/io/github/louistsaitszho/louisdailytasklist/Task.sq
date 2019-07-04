@@ -1,0 +1,4 @@
+createTable:
+CREATE TABLE taskEntiry(
+    id TEXT NOT NULL PRIMARY KEY
+);
