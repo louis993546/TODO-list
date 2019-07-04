@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
+import io.github.louistsaitszho.louisdailytasklist.Database
+import io.github.louistsaitszho.louisdailytasklist.R
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
