@@ -1,4 +1,17 @@
 createTable:
-CREATE TABLE taskEntiry(
-    id TEXT NOT NULL PRIMARY KEY
+CREATE TABLE taskEntity(
+    id TEXT NOT NULL PRIMARY KEY,
+    content TEXT NOT NULL
+--     state
 );
+
+getAllTasks:
+SELECT * FROM taskEntity;
+
+insertOne:
+INSERT INTO taskEntity(id, content) VALUES (?, ?);
+
+editContent:
+UPDATE taskEntity SET content = ? WHERE id = ?;
+
+-- editState:
