@@ -23,12 +23,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupPages(tabLayout: TabLayout, viewPager: ViewPager2) {
-        viewPager.adapter = ViewPagerAdapter()
+        viewPager.adapter = ViewPagerAdapter(PageRepositoryImpl())
         TabLayoutMediator(tabLayout, viewPager, true) { tab, position ->
             tab.text = when (position) {
-                0 -> "TODO"
-                1 -> "Doing"
-                2 -> "Done"
+                0 -> getString(R.string.label_todo)
+                1 -> getString(R.string.label_doing)
+                2 -> getString(R.string.label_done)
                 else -> error("WTF")
             }
         }.attach()
@@ -56,8 +56,8 @@ class TaskListViewHolder(private val binding: ViewHolderTaskListBinding) : Recyc
     }
 }
 
-class ViewPagerAdapter : RecyclerView.Adapter<TaskListViewHolder>() {
-    override fun getItemCount(): Int = 3
+class ViewPagerAdapter(private val pageRepository: PageRepository) : RecyclerView.Adapter<TaskListViewHolder>() {
+    override fun getItemCount(): Int = pageRepository.getSize()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TaskListViewHolder.create(parent)
 
@@ -93,11 +93,3 @@ class TaskAdapter(
 }
 
 fun ViewGroup.layoutInflater(): LayoutInflater = LayoutInflater.from(this.context)
-
-enum class TaskState { NOT_DONE, IN_PROGRESS, DONE }
-
-data class Task(
-    val id: UUID,
-    val content: String,
-    val state: TaskState
-)

@@ -2,16 +2,16 @@ package io.github.louistsaitszho.louisdailytasklist
 
 import java.util.*
 
-interface Repository {
+interface TaskRepository {
     fun getAllTasks(): List<Task>
     fun addTask(content: String, state: TaskState)
     fun editTaskContent(taskID: UUID, newContent: String)
     fun editTaskState(taskID: UUID, newState: TaskState)
 }
 
-class RepositoryImpl(
+class TaskRepositoryImpl(
     private val database: Database
-) : Repository {
+) : TaskRepository {
     override fun getAllTasks() = database
         .taskQueries
         .getAllTasks { id, content -> Task(UUID.fromString(id), content, TaskState.NOT_DONE) }
