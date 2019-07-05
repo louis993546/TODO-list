@@ -1,20 +1,17 @@
 package io.github.louistsaitszho.louisdailytasklist
 
-import android.app.Application
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
-import com.squareup.sqldelight.android.AndroidSqliteDriver
+import com.google.android.material.tabs.TabLayoutMediator
 import io.github.louistsaitszho.louisdailytasklist.databinding.ActivityMainBinding
-import io.github.louistsaitszho.louisdailytasklist.databinding.ViewHolderTaskEntryBinding
-import io.github.louistsaitszho.louisdailytasklist.databinding.ViewHolderTaskNormalBinding
+import io.github.louistsaitszho.louisdailytasklist.databinding.ViewHolderTaskListBinding
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -26,62 +23,46 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupPages(tabLayout: TabLayout, viewPager: ViewPager2) {
-
+        viewPager.adapter = ViewPagerAdapter()
+        TabLayoutMediator(tabLayout, viewPager, true) { tab, position ->
+            tab.text = when (position) {
+                0 -> "TODO"
+                1 -> "Doing"
+                2 -> "Done"
+                else -> error("WTF")
+            }
+        }.attach()
+//        tabLayout.setupWithViewPager(viewPager)   //TODO Does not exist yet
     }
 }
 
-class App : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        ServiceLocator.setApplicationContext(this)
-    }
-}
+class TaskListViewHolder(private val binding: ViewHolderTaskListBinding) : RecyclerView.ViewHolder(binding.root) {
 
-object ServiceLocator {
-    //global scope
-    private lateinit var applicationContext: Context
-
-    fun setApplicationContext(applicationContext: Context) {
-        this.applicationContext = applicationContext
+    init {
+        binding.recyclerViewTaskList.layoutManager = LinearLayoutManager(itemView.context)
     }
 
-    val database: Database by lazy {
-        Database(AndroidSqliteDriver(Database.Schema, applicationContext, "louis.db"))
-    }
-}
-
-sealed class TaskViewHolder(viewType: Int, view: View) : RecyclerView.ViewHolder(view)
-
-class TaskNormalViewHolder(
-    private val binding: ViewHolderTaskNormalBinding
-) : TaskViewHolder(VIEW_TYPE, binding.root) {
-
-    fun bind(task: Task) {
-        binding.content = task.content
+    fun bind() {
+        binding.recyclerViewTaskList.adapter = TaskAdapter(
+            itemCounter = { 3 },
+            itemAt = { Task(UUID.randomUUID(), "TODO", TaskState.NOT_DONE) }
+        )
     }
 
     companion object {
-        const val VIEW_TYPE = 100
-
-        fun create(parent: ViewGroup): TaskNormalViewHolder = TaskNormalViewHolder(
-            ViewHolderTaskNormalBinding.inflate(parent.layoutInflater(), parent, false)
+        fun create(parent: ViewGroup) = TaskListViewHolder(
+            ViewHolderTaskListBinding.inflate(parent.layoutInflater(), parent, false)
         )
     }
 }
 
-class TaskEntryViewHolder(
-    private val binding: ViewHolderTaskEntryBinding
-) : TaskViewHolder(VIEW_TYPE, binding.root) {
+class ViewPagerAdapter : RecyclerView.Adapter<TaskListViewHolder>() {
+    override fun getItemCount(): Int = 3
 
-    fun bind(task: Task?) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TaskListViewHolder.create(parent)
 
-    }
-
-    companion object {
-        const val VIEW_TYPE = 200
-        fun create(parent: ViewGroup): TaskEntryViewHolder = TaskEntryViewHolder(
-            ViewHolderTaskEntryBinding.inflate(parent.layoutInflater(), parent, false)
-        )
+    override fun onBindViewHolder(holder: TaskListViewHolder, position: Int) {
+        holder.bind()
     }
 }
 
@@ -94,7 +75,7 @@ class TaskAdapter(
     override fun getItemCount() = itemCounter()
 
     override fun getItemViewType(position: Int): Int {
-        TODO()
+        return TaskEntryViewHolder.VIEW_TYPE   //TODO
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder = when (viewType) {
@@ -120,34 +101,3 @@ data class Task(
     val content: String,
     val state: TaskState
 )
-
-interface Repository {
-    fun getAllTasks(): List<Task>
-    fun addTask(content: String, state: TaskState)
-    fun editTaskContent(taskID: UUID, newContent: String)
-    fun editTaskState(taskID: UUID, newState: TaskState)
-}
-
-class RepositoryImpl(
-    private val database: Database
-) : Repository {
-    override fun getAllTasks() = database
-        .taskQueries
-        .getAllTasks { id, content -> Task(UUID.fromString(id), content, TaskState.NOT_DONE) }
-        .executeAsList()
-
-    //TODO use [state]
-    override fun addTask(content: String, state: TaskState) {
-        do {
-            val result = runCatching { database.taskQueries.insertOne(UUID.randomUUID().toString(), content) }
-        } while (result.isFailure)
-    }
-
-    override fun editTaskContent(taskID: UUID, newContent: String) {
-        database.taskQueries.editContent(newContent, taskID.toString())
-    }
-
-    override fun editTaskState(taskID: UUID, newState: TaskState) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-}
