@@ -7,9 +7,9 @@ interface PageRepository {
 
 class PageRepositoryImpl : PageRepository {
     private val pageList = listOf(
-        Page(TaskState.NOT_DONE),
-        Page(TaskState.IN_PROGRESS),
-        Page(TaskState.DONE)
+        Page(Task.State.NOT_DONE),
+        Page(Task.State.IN_PROGRESS),
+        Page(Task.State.DONE)
     )
 
     override fun getSize(): Int = pageList.size

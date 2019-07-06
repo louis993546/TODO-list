@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
                 else -> error("WTF")
             }
         }.attach()
-//        tabLayout.setupWithViewPager(viewPager)   //TODO Does not exist yet
     }
 }
 
@@ -45,7 +44,7 @@ class TaskListViewHolder(private val binding: ViewHolderTaskListBinding) : Recyc
     fun bind() {
         binding.recyclerViewTaskList.adapter = TaskAdapter(
             itemCounter = { 3 },
-            itemAt = { Task(UUID.randomUUID(), "TODO", TaskState.NOT_DONE) }
+            itemAt = { Task(UUID.randomUUID(), "TODO", Task.State.NOT_DONE) }
         )
     }
 
