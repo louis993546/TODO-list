@@ -12,7 +12,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.louistsaitszho.louisdailytasklist.databinding.ActivityMainBinding
 import io.github.louistsaitszho.louisdailytasklist.databinding.ViewHolderTaskListBinding
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupPages(tabLayout: TabLayout, viewPager: ViewPager2) {
-        viewPager.adapter = ViewPagerAdapter(PageRepositoryImpl())
+        viewPager.adapter = ViewPagerAdapter(ServiceLocator.pageRepository, ServiceLocator.taskRepository)
         TabLayoutMediator(tabLayout, viewPager, true) { tab, position ->
             tab.text = when (position) {
                 0 -> getString(R.string.label_todo)
@@ -35,16 +34,18 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class TaskListViewHolder(private val binding: ViewHolderTaskListBinding) : RecyclerView.ViewHolder(binding.root) {
+class TaskListViewHolder(
+    private val binding: ViewHolderTaskListBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
     init {
         binding.recyclerViewTaskList.layoutManager = LinearLayoutManager(itemView.context)
     }
 
-    fun bind() {
+    fun bind(taskRepository: TaskRepository, state: Task.State) {
         binding.recyclerViewTaskList.adapter = TaskAdapter(
-            itemCounter = { 3 },
-            itemAt = { Task(UUID.randomUUID(), "TODO", Task.State.NOT_DONE) }
+            itemCounter = { taskRepository.getTasks(state).size },
+            itemAt = { index -> taskRepository.getTasks(state)[index] }
         )
     }
 
@@ -55,13 +56,16 @@ class TaskListViewHolder(private val binding: ViewHolderTaskListBinding) : Recyc
     }
 }
 
-class ViewPagerAdapter(private val pageRepository: PageRepository) : RecyclerView.Adapter<TaskListViewHolder>() {
+class ViewPagerAdapter(
+    private val pageRepository: PageRepository,
+    private val taskRepository: TaskRepository
+) : RecyclerView.Adapter<TaskListViewHolder>() {
     override fun getItemCount(): Int = pageRepository.getSize()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TaskListViewHolder.create(parent)
 
     override fun onBindViewHolder(holder: TaskListViewHolder, position: Int) {
-        holder.bind()
+        holder.bind(taskRepository, pageRepository.getPageByIndex(position).representingTaskState)
     }
 }
 

@@ -1,7 +1,6 @@
 package io.github.louistsaitszho.louisdailytasklist
 
 import android.content.Context
-import com.squareup.sqldelight.android.AndroidSqliteDriver
 
 object ServiceLocator {
     //global scope
@@ -11,13 +10,11 @@ object ServiceLocator {
         this.applicationContext = applicationContext
     }
 
-    val database: Database by lazy {
-        Database(
-            AndroidSqliteDriver(
-                Database.Schema,
-                applicationContext,
-                "louis.db"
-            )
-        )
-    }
+//    private val database: Database by lazy {
+//        Database(AndroidSqliteDriver(Database.Schema, applicationContext, "louis.db"))
+//    }
+
+    val taskRepository: TaskRepository  by lazy { TempTaskRepositoryImpl() }
+
+    val pageRepository: PageRepository by lazy { PageRepositoryImpl() }
 }
