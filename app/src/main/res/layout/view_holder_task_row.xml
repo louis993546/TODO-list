@@ -6,7 +6,7 @@
 
         <variable
             name="task"
-            type="io.github.louistsaitszho.stand_up.model.Task" />
+            type="io.github.louistsaitszho.stand_up.core.model.Task" />
     </data>
 
     <LinearLayout

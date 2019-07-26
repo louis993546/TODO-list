@@ -1,4 +1,4 @@
-package io.github.louistsaitszho.stand_up;
+package io.github.louistsaitszho.stand_up.feature_task_list;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import dagger.android.support.AndroidSupportInjection;
+import io.github.louistsaitszho.stand_up.R;
 import io.github.louistsaitszho.stand_up.databinding.FragmentMainBinding;
 
 public class MainFragment extends Fragment {

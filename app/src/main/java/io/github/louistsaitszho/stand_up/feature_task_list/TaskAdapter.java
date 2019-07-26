@@ -1,4 +1,4 @@
-package io.github.louistsaitszho.stand_up;
+package io.github.louistsaitszho.stand_up.feature_task_list;
 
 import android.view.ViewGroup;
 

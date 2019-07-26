@@ -1,11 +1,11 @@
-package io.github.louistsaitszho.stand_up.data.local;
+package io.github.louistsaitszho.stand_up.core.data.local;
 
 import androidx.annotation.Nullable;
 import androidx.room.TypeConverter;
 
 import com.google.common.base.Strings;
 
-import io.github.louistsaitszho.stand_up.model.TaskState;
+import io.github.louistsaitszho.stand_up.core.model.TaskState;
 
 public class ModelRoomConverters {
     @TypeConverter

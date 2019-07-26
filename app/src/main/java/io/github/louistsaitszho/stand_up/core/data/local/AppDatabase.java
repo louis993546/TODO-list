@@ -1,4 +1,4 @@
-package io.github.louistsaitszho.stand_up.data.local;
+package io.github.louistsaitszho.stand_up.core.data.local;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

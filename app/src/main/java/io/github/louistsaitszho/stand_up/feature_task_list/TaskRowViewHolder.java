@@ -1,4 +1,4 @@
-package io.github.louistsaitszho.stand_up;
+package io.github.louistsaitszho.stand_up.feature_task_list;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import io.github.louistsaitszho.stand_up.core.model.Task;
 import io.github.louistsaitszho.stand_up.databinding.ViewHolderTaskRowBinding;
-import io.github.louistsaitszho.stand_up.model.Task;
 
 public class TaskRowViewHolder extends RecyclerView.ViewHolder {
 

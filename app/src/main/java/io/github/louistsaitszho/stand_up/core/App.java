@@ -1,4 +1,4 @@
-package io.github.louistsaitszho.stand_up;
+package io.github.louistsaitszho.stand_up.core;
 
 import android.app.Application;
 
@@ -9,6 +9,8 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
+import io.github.louistsaitszho.stand_up.core.di.DaggerAppComponent;
+
 
 public class App extends Application implements HasAndroidInjector {
     @Inject

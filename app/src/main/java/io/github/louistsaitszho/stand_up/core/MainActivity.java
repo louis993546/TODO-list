@@ -1,4 +1,4 @@
-package io.github.louistsaitszho.stand_up;
+package io.github.louistsaitszho.stand_up.core;
 
 import android.os.Bundle;
 
@@ -11,7 +11,9 @@ import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
+import io.github.louistsaitszho.stand_up.R;
 import io.github.louistsaitszho.stand_up.databinding.ActivityMainBinding;
+import io.github.louistsaitszho.stand_up.feature_task_list.MainFragment;
 
 public class MainActivity extends AppCompatActivity implements HasAndroidInjector {
 

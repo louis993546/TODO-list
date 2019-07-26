@@ -1,4 +1,4 @@
-package io.github.louistsaitszho.stand_up.data.local;
+package io.github.louistsaitszho.stand_up.core.data.local;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 import org.threeten.bp.LocalDate;
 
-import io.github.louistsaitszho.stand_up.model.TaskState;
+import io.github.louistsaitszho.stand_up.core.model.TaskState;
 
 @Entity(tableName = "task")
 public class TaskEntity {
