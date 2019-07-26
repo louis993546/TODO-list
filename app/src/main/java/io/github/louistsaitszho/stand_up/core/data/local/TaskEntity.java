@@ -14,19 +14,19 @@ import io.github.louistsaitszho.stand_up.core.model.TaskState;
 public class TaskEntity {
 
     @PrimaryKey(autoGenerate = true)
-    int id;
+    public int id;
 
     @ColumnInfo(name = "title")
     @NonNull
-    String title;
+    public String title;
 
     @ColumnInfo(name = "state")
     @NonNull
-    TaskState state;
+    public TaskState state;
 
     @ColumnInfo(name = "startDate")
     @NonNull
-    LocalDate startDate;
+    public LocalDate startDate;
 
     public TaskEntity(@NonNull int id,
                       @NonNull String title,
