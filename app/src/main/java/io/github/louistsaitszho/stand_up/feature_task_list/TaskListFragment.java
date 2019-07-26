@@ -13,8 +13,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import java.util.List;
+
 import dagger.android.support.AndroidSupportInjection;
 import io.github.louistsaitszho.stand_up.R;
+import io.github.louistsaitszho.stand_up.core.model.Task;
 import io.github.louistsaitszho.stand_up.databinding.FragmentTaskListBinding;
 import timber.log.Timber;
 
@@ -77,7 +80,7 @@ public class TaskListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         viewModel.fakeListLiveData.observe(
                 getViewLifecycleOwner(),
-                tasks -> taskAdapter.resetTaskList(tasks)
+                this::onListChanged
         );
     }
 
@@ -87,5 +90,15 @@ public class TaskListFragment extends Fragment {
         }
         binding.recyclerViewTaskList.setAdapter(taskAdapter);
         binding.recyclerViewTaskList.setLayoutManager(linearLayoutManager);
+        binding.recyclerViewTaskList.addItemDecoration(
+                new UniformGapItemDecoration(
+                        getResources().getDimensionPixelOffset(R.dimen.standard_list_gap)
+                )
+        );
+    }
+
+    private void onListChanged(List<Task> newTasks) {
+        Timber.tag(TAG).d("new tasks received, size = %s", newTasks.size());
+        taskAdapter.resetTaskList(newTasks);
     }
 }

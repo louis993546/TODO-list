@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import io.github.louistsaitszho.stand_up.core.model.Task;
 import io.github.louistsaitszho.stand_up.databinding.ViewHolderTaskRowBinding;
 
-public class TaskRowViewHolder extends RecyclerView.ViewHolder {
+class TaskRowViewHolder extends RecyclerView.ViewHolder {
 
     static TaskRowViewHolder newInstance(ViewGroup parent) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
@@ -28,7 +28,7 @@ public class TaskRowViewHolder extends RecyclerView.ViewHolder {
         this.binding = binding;
     }
 
-    public void bind(Task task) {
+    void bind(Task task) {
         binding.setTask(task);
         binding.executePendingBindings();
     }
