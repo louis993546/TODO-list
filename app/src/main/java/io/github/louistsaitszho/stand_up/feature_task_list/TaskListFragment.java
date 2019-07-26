@@ -10,23 +10,36 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import dagger.android.support.AndroidSupportInjection;
 import io.github.louistsaitszho.stand_up.R;
-import io.github.louistsaitszho.stand_up.databinding.FragmentMainBinding;
+import io.github.louistsaitszho.stand_up.databinding.FragmentTaskListBinding;
+import timber.log.Timber;
 
-public class MainFragment extends Fragment {
+public class TaskListFragment extends Fragment {
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    private static final String TAG = "TaskListFragment";
+
+    public static TaskListFragment newInstance() {
+        Timber.tag(TAG).d("newInstance");
+        return new TaskListFragment();
     }
 
+    private TaskListViewModel viewModel;
+
     // TODO does this count as non-null?
-    private FragmentMainBinding binding;
+    private FragmentTaskListBinding binding;
 
     private LinearLayoutManager linearLayoutManager;
     private TaskAdapter taskAdapter = new TaskAdapter();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(TaskListViewModel.class);
+    }
 
     @Nullable
     @Override
@@ -37,7 +50,7 @@ public class MainFragment extends Fragment {
     ) {
         binding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_main,
+                R.layout.fragment_task_list,
                 container,
                 false
         );
@@ -48,6 +61,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
         initRecyclerView();
     }
 
@@ -55,6 +70,14 @@ public class MainFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewModel.fakeListLiveData.observe(getViewLifecycleOwner(), tasks -> {
+            Timber.tag(TAG).d(tasks.toString());
+        });
     }
 
     private void initRecyclerView() {

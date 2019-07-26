@@ -1,6 +1,6 @@
 package io.github.louistsaitszho.stand_up.core;
 
-import android.app.Application;
+import androidx.multidex.MultiDexApplication;
 
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
@@ -10,17 +10,23 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
 import io.github.louistsaitszho.stand_up.core.di.DaggerAppComponent;
+import timber.log.Timber;
 
 
-public class App extends Application implements HasAndroidInjector {
+public class App extends MultiDexApplication implements HasAndroidInjector {
     @Inject
     DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        initTimber();
         initThreeTen();
         initDagger();
+    }
+
+    private void initTimber() {
+        Timber.plant(new Timber.DebugTree());
     }
 
     private void initThreeTen() {

@@ -13,7 +13,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
 import io.github.louistsaitszho.stand_up.R;
 import io.github.louistsaitszho.stand_up.databinding.ActivityMainBinding;
-import io.github.louistsaitszho.stand_up.feature_task_list.MainFragment;
+import io.github.louistsaitszho.stand_up.feature_task_list.TaskListFragment;
 
 public class MainActivity extends AppCompatActivity implements HasAndroidInjector {
 
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements HasAndroidInjecto
     private void initMainFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, MainFragment.newInstance())
+                .add(R.id.fragment_container, TaskListFragment.newInstance())
                 .commit();
     }
 

@@ -4,11 +4,8 @@ import androidx.annotation.NonNull;
 
 import org.threeten.bp.LocalDate;
 
-import java.util.UUID;
-
 public class Task {
-    @NonNull
-    public UUID id;
+    public int id;
 
     @NonNull
     public String title;
@@ -19,7 +16,7 @@ public class Task {
     @NonNull
     public LocalDate startDate;
 
-    public Task(@NonNull UUID id,
+    public Task(@NonNull int id,
                 @NonNull String title,
                 @NonNull TaskState state,
                 @NonNull LocalDate startDate) {
@@ -27,5 +24,15 @@ public class Task {
         this.title = title;
         this.state = state;
         this.startDate = startDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", state=" + state +
+                ", startDate=" + startDate +
+                '}';
     }
 }

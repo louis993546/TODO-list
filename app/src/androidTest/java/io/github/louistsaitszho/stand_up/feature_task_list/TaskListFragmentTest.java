@@ -8,10 +8,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class MainFragmentTest {
+public class TaskListFragmentTest {
     @Test
     public void test() {
-//        FragmentScenario<MainFragment> mainFragmentScenario = FragmentScenario.launchInContainer(MainFragment.class);
+//        FragmentScenario<TaskListFragment> mainFragmentScenario = FragmentScenario.launchInContainer(TaskListFragment.class);
 //        mainFragmentScenario.onFragment(fragment -> {
 //
 //        });

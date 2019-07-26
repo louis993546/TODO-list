@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -28,6 +29,11 @@ android {
     }
     dataBinding {
         enabled = true
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 
@@ -68,10 +74,16 @@ dependencies {
     // Backports or utils or kotlin-ish toys
     implementation 'com.google.guava:guava:28.0-android'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    // Other
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-3'
 
     // General testing stuff
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:2.25.0"
+    testImplementation 'org.robolectric:robolectric:4.3'
     androidTestImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
