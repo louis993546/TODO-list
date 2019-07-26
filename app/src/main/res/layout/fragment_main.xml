@@ -6,16 +6,17 @@
 
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        android:orientation="vertical">
 
-        <fragment
-            android:id="@+id/fragment_main"
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="io.github.louistsaitszho.stand_up.MainFragment" />
+            tools:listitem="@layout/view_holder_task_row">
 
-    </FrameLayout>
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
 </layout>

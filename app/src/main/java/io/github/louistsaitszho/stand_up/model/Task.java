@@ -8,16 +8,16 @@ import java.util.UUID;
 
 public class Task {
     @NonNull
-    UUID id;
+    public UUID id;
 
     @NonNull
-    String title;
+    public String title;
 
     @NonNull
-    TaskState state;
+    public TaskState state;
 
     @NonNull
-    LocalDate startDate;
+    public LocalDate startDate;
 
     public Task(@NonNull UUID id,
                 @NonNull String title,
