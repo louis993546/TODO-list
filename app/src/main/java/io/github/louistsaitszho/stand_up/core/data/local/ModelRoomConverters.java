@@ -7,7 +7,8 @@ import com.google.common.base.Strings;
 
 import io.github.louistsaitszho.stand_up.core.model.TaskState;
 
-public class ModelRoomConverters {
+@SuppressWarnings("WeakerAccess")
+class ModelRoomConverters {
     @TypeConverter
     @Nullable
     public static TaskState taskStateFromString(@Nullable String input) {
