@@ -11,7 +11,7 @@ import io.github.louistsaitszho.stand_up.model.Task;
 
 public class TaskRowViewHolder extends RecyclerView.ViewHolder {
 
-    public static TaskRowViewHolder newInstance(ViewGroup parent) {
+    static TaskRowViewHolder newInstance(ViewGroup parent) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ViewHolderTaskRowBinding binding = ViewHolderTaskRowBinding.inflate(
                 layoutInflater,
@@ -29,6 +29,7 @@ public class TaskRowViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Task task) {
-
+        binding.setTask(task);
+        binding.executePendingBindings();
     }
 }
