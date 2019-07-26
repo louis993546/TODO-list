@@ -75,9 +75,10 @@ public class TaskListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel.fakeListLiveData.observe(getViewLifecycleOwner(), tasks -> {
-            Timber.tag(TAG).d(tasks.toString());
-        });
+        viewModel.fakeListLiveData.observe(
+                getViewLifecycleOwner(),
+                tasks -> taskAdapter.resetTaskList(tasks)
+        );
     }
 
     private void initRecyclerView() {

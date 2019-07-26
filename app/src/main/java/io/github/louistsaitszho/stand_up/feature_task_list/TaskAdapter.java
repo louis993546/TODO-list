@@ -5,10 +5,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
+import io.github.louistsaitszho.stand_up.core.model.Task;
+
 public class TaskAdapter extends RecyclerView.Adapter<TaskRowViewHolder> {
+    private List<Task> taskList;
+
     @Override
     public int getItemCount() {
-        return 0;
+        return taskList == null ? 0 : taskList.size();
     }
 
     @NonNull
@@ -19,7 +25,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskRowViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TaskRowViewHolder holder, int position) {
-        // TODO get item by position
-        // holder.bind();
+        holder.bind(taskList.get(position));
+    }
+
+    public void resetTaskList(List<Task> taskList) {
+        this.taskList = taskList;
+        this.notifyDataSetChanged();
     }
 }
