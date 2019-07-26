@@ -35,21 +35,27 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    // General Android stuff
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
 
+    // General Java stuff
     implementation 'com.google.guava:guava:28.0-android'
+
+    // Dagger
     implementation 'com.google.dagger:dagger:2.23.2'
     implementation 'com.google.dagger:dagger-android-support:2.23.2'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.23.2'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.23.2'
 
+    // Lifecycle & ViewModel
     def lifecycle_version = "2.0.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version"
     testImplementation "androidx.arch.core:core-testing:$lifecycle_version"
 
+    // Room
     def room_version = "2.1.0"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
@@ -57,9 +63,15 @@ dependencies {
     implementation "androidx.room:room-guava:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
 
+    // RxJava
     implementation "io.reactivex.rxjava2:rxjava:2.2.10"
 
+    // Backports
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+
+    // General testing stuff
     testImplementation 'junit:junit:4.13-beta-3'
+    testImplementation "org.mockito:mockito-core:2.25.0"
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
