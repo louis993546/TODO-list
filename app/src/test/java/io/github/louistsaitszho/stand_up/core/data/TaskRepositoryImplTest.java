@@ -21,6 +21,7 @@ import io.github.louistsaitszho.stand_up.core.data.local.TaskEntityDao;
 import io.github.louistsaitszho.stand_up.core.model.Task;
 import io.github.louistsaitszho.stand_up.core.model.TaskState;
 import io.reactivex.Single;
+import kotlin.NotImplementedError;
 
 import static org.mockito.Mockito.when;
 
@@ -30,7 +31,7 @@ public class TaskRepositoryImplTest {
     @Mock
     TaskEntityDao mockDao;
 
-    TaskRepositoryImpl taskRepositoryImpl;
+    TaskRepository taskRepositoryImpl;
 
     @Before
     public void setup() {
@@ -109,6 +110,76 @@ public class TaskRepositoryImplTest {
                 .assertNoErrors()
                 .assertResult(Optional.of(expectation))
                 .dispose();
+    }
+
+    @Test
+    public void GIVEN_taskDoesNotExist_WHEN_getTaskByID_THEN_getAbsent() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_somethingElseWentWrong_WHEN_getTaskByID_THEN_fail() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void WHEN_createTask_THEN_getsNewTaskWithID() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_somethingWentWrong_WHEN_createTask_THEN_fail() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_nullLocalDate_WHEN_createTask_THEN_fail() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_nullTitle_WHEN_createTask_THEN_fail() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_thatTaskExists_WHEN_updateTaskState_THEN_getNewTask() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_thatTaskDoesNotExist_WHEN_updateTaskState_THEN_fail() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_invalidNewTaskState_WHEN_updateTaskState_THEN_fail() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_somethingElseWentWrong_WHEN_updateTaskState_THEN_fail() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_thatTaskExists_WHEN_updateTaskTitle_THEN_getNewTask() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_thatTaskDoesNotExist_WHEN_updateTaskTitle_THEN_fail() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_invalidNewTitle_WHEN_updateTaskTitle_THEN_fail() {
+        throw new NotImplementedError();
+    }
+
+    @Test
+    public void GIVEN_somethingElseWentWrong_WHEN_updateTaskTitle_THEN_fail() {
+        throw new NotImplementedError();
     }
 
 }

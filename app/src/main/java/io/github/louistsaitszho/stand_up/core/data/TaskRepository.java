@@ -16,6 +16,7 @@ interface TaskRepository {
     @NonNull
     Single<List<Task>> getAllTasks();
 
+    //TODO turn this into Maybe
     @NonNull
     Single<Optional<Task>> getTaskByID(int id);
 
