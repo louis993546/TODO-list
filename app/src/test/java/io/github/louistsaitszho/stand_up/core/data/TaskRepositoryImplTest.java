@@ -1,6 +1,9 @@
 package io.github.louistsaitszho.stand_up.core.data;
 
+import android.database.SQLException;
 import android.database.sqlite.SQLiteCantOpenDatabaseException;
+
+import androidx.room.EmptyResultSetException;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -16,13 +19,16 @@ import org.threeten.bp.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
+import io.github.louistsaitszho.stand_up.OddlySpecificException;
 import io.github.louistsaitszho.stand_up.core.data.local.TaskEntity;
 import io.github.louistsaitszho.stand_up.core.data.local.TaskEntityDao;
 import io.github.louistsaitszho.stand_up.core.model.Task;
 import io.github.louistsaitszho.stand_up.core.model.TaskState;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
-import kotlin.NotImplementedError;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -31,7 +37,7 @@ public class TaskRepositoryImplTest {
     @Mock
     TaskEntityDao mockDao;
 
-    TaskRepository taskRepositoryImpl;
+    private TaskRepository taskRepositoryImpl;
 
     @Before
     public void setup() {
@@ -73,7 +79,6 @@ public class TaskRepositoryImplTest {
                 .assertNoErrors()
                 .assertResult(expectation)
                 .dispose();
-        ;
     }
 
     @Test
@@ -102,84 +107,255 @@ public class TaskRepositoryImplTest {
         when(mockDao.selectTaskByID(id)).thenReturn(Single.just(Optional.of(fakeRes)));
 
         //WHEN
-        Single<Optional<Task>> result = taskRepositoryImpl.getTaskByID(id);
+        Maybe<Task> result = taskRepositoryImpl.getTaskByID(id);
 
         //THEN
         Task expectation = new Task(id, title, state, startTime);
         result.test()
                 .assertNoErrors()
-                .assertResult(Optional.of(expectation))
+                .assertResult(expectation)
                 .dispose();
     }
 
     @Test
     public void GIVEN_taskDoesNotExist_WHEN_getTaskByID_THEN_getAbsent() {
-        throw new NotImplementedError();
+        //GIVEN
+        int id = -1;
+        Throwable error = new EmptyResultSetException("entry not found");
+        when(mockDao.selectTaskByID(id)).thenReturn(Maybe.error(error));
+
+        //WHEN
+        Maybe<Task> result = taskRepositoryImpl.getTaskByID(id);
+
+        //THEN
+        result.test()
+                .assertNoValues()
+                .assertError(error)
+                .dispose();
     }
 
     @Test
     public void GIVEN_somethingElseWentWrong_WHEN_getTaskByID_THEN_fail() {
-        throw new NotImplementedError();
+        //GIVEN
+        when(mockDao.selectTaskByID(anyInt())).thenReturn(Maybe.error(new OddlySpecificException()));
+
+        //WHEN
+        Maybe<Task> result = taskRepositoryImpl.getTaskByID(1);
+
+        //THEN
+        result.test()
+                .assertNoValues()
+                .assertError(OddlySpecificException.class)
+                .dispose();
     }
 
     @Test
     public void WHEN_createTask_THEN_getsNewTaskWithID() {
-        throw new NotImplementedError();
+        //GIVEN
+        String title = "title";
+        LocalDate date = LocalDate.parse("2019-07-27");
+        when(mockDao.insertTask(new TaskEntity(title, TaskState.TODO, date)))
+                .thenReturn(Single.just(Lists.newArrayList(1L)));
+
+        //WHEN
+        Single<Task> result = taskRepositoryImpl.createTask(title, date);
+
+        //THEN
+        Task expectation = new Task(1, title, TaskState.TODO, date);
+        result.test()
+                .assertNoErrors()
+                .assertValue(expectation)
+                .dispose();
     }
 
     @Test
     public void GIVEN_somethingWentWrong_WHEN_createTask_THEN_fail() {
-        throw new NotImplementedError();
+        //GIVEN
+        // TODO give it a value
+        String title = "title";
+        LocalDate startDate = LocalDate.parse("2019-07-29");
+        TaskEntity input = new TaskEntity(title, TaskState.TODO, startDate);
+        when(mockDao.insertTask(input)).thenReturn(Single.error(new OddlySpecificException()));
+
+        //WHEN
+        Single<Task> result = taskRepositoryImpl.createTask(title, startDate);
+
+        //THEN
+        result.test()
+                .assertNoValues()
+                .assertError(OddlySpecificException.class)
+                .dispose();
     }
 
     @Test
     public void GIVEN_nullLocalDate_WHEN_createTask_THEN_fail() {
-        throw new NotImplementedError();
+        //GIVEN
+
+        //WHEN
+        Single<Task> result = taskRepositoryImpl.createTask("title", null);
+
+        //THEN
+        result.test()
+                .assertError(NullPointerException.class)
+                .assertNoValues()
+                .dispose();
     }
 
     @Test
     public void GIVEN_nullTitle_WHEN_createTask_THEN_fail() {
-        throw new NotImplementedError();
+        //GIVEN
+
+        //WHEN
+        //noinspection ConstantConditions because this is exactly what it's testing
+        Single<Task> result = taskRepositoryImpl.createTask(null, LocalDate.now());
+
+        //THEN
+        result.test()
+                .assertError(NullPointerException.class)
+                .assertNoValues()
+                .dispose();
     }
 
     @Test
     public void GIVEN_thatTaskExists_WHEN_updateTaskState_THEN_getNewTask() {
-        throw new NotImplementedError();
+        //GIVEN
+        int id = 1;
+        String title = "title";
+        TaskState before = TaskState.DOING;
+        TaskState after = TaskState.DONE;
+        LocalDate startDate = LocalDate.parse("2019-07-29");
+        TaskEntity input = new TaskEntity(id, title, before, startDate);
+        TaskEntity output = new TaskEntity(id, title, after, startDate);
+        when(mockDao.updateTasks(input)).thenReturn(Completable.complete());
+        when(mockDao.selectTaskByID(id)).thenReturn(Maybe.just(output));
+
+        //WHEN
+        Single<Task> result = taskRepositoryImpl.updateTaskState(id, after);
+
+        //THEN
+        Task expectation = new Task(id, title, after, startDate);
+        result.test()
+                .assertNoErrors()
+                .assertValue(expectation)
+                .dispose();
     }
 
     @Test
     public void GIVEN_thatTaskDoesNotExist_WHEN_updateTaskState_THEN_fail() {
-        throw new NotImplementedError();
+        //GIVEN
+        int id = -1;
+
+
+        //WHEN
+        Single<Task> result = taskRepositoryImpl.updateTaskState(id, TaskState.TODO);
+
+        //THEN
+        result.test()
+                .assertNoValues()
+                .assertError()
+                .dispose();
     }
 
     @Test
     public void GIVEN_invalidNewTaskState_WHEN_updateTaskState_THEN_fail() {
-        throw new NotImplementedError();
+        //GIVEN
+
+        //WHEN
+        //noinspection ConstantConditions because that's what this is testing
+        Single<Task> result = taskRepositoryImpl.updateTaskState(1, null);
+
+        //THEN
+        result.test()
+                .assertNoValues()
+                .assertError(NullPointerException.class)
+                .dispose();
     }
 
     @Test
     public void GIVEN_somethingElseWentWrong_WHEN_updateTaskState_THEN_fail() {
-        throw new NotImplementedError();
+        //GIVEN
+        when(mockDao.updateTasks()).thenReturn(Completable.error(new OddlySpecificException()));
+
+        //WHEN
+        Single<Task> result = taskRepositoryImpl.updateTaskState();
+
+        //THEN
+        result.test()
+                .assertNoValues()
+                .assertError(OddlySpecificException.class)
+                .dispose();
     }
 
     @Test
     public void GIVEN_thatTaskExists_WHEN_updateTaskTitle_THEN_getNewTask() {
-        throw new NotImplementedError();
+        //GIVEN
+        int id = 1;
+        String newTitle = "new title";
+        TaskState state = TaskState.TODO;
+        LocalDate startDate = LocalDate.parse("2019--7-29");
+        when(mockDao.updateTasks()).thenReturn(Completable.complete());
+        when(mockDao.selectTaskByID(id))
+                .thenReturn(Maybe.just(new TaskEntity(id, newTitle, state, startDate)));
+
+        //WHEN
+        Single<Task> result = taskRepositoryImpl.updateTaskTitle(id, newTitle);
+
+        //THEN
+        Task expectation = new Task(id, newTitle, state, startDate);
+        result.test()
+                .assertNoErrors()
+                .assertValue(expectation)
+                .dispose();
     }
 
     @Test
     public void GIVEN_thatTaskDoesNotExist_WHEN_updateTaskTitle_THEN_fail() {
-        throw new NotImplementedError();
+        //GIVEN
+        int id = -1;
+        when(mockDao.updateTasks()).thenReturn(Completable.error(new SQLException()));
+
+        //WHEN
+        Single<Task> result = taskRepositoryImpl.updateTaskTitle(id, "anything");
+
+        //THEN
+        result.test()
+                .assertNoValues()
+                .assertError(SQLException.class)
+                .dispose();
     }
 
     @Test
     public void GIVEN_invalidNewTitle_WHEN_updateTaskTitle_THEN_fail() {
-        throw new NotImplementedError();
+        //GIVEN
+
+        //WHEN
+        //noinspection ConstantConditions because it is what this test is testing
+        Single<Task> result = taskRepositoryImpl.updateTaskTitle(1, null);
+
+        //THEN
+        result.test()
+                .assertNoValues()
+                .assertError(NullPointerException.class)
+                .dispose();
     }
 
     @Test
     public void GIVEN_somethingElseWentWrong_WHEN_updateTaskTitle_THEN_fail() {
-        throw new NotImplementedError();
+        //GIVEN
+        int id = 1;
+        when(mockDao.selectTaskByID(id))
+                .thenReturn(Maybe.just(new TaskEntity()));
+        when(mockDao.updateTasks())
+                .thenReturn(Completable.error(new OddlySpecificException()));
+
+        //WHEN
+        Single<Task> result = taskRepositoryImpl.updateTaskTitle(id, "anything");
+
+        //THEN
+        result.test()
+                .assertNoValues()
+                .assertError(OddlySpecificException.class)
+                .dispose();
     }
 
 }

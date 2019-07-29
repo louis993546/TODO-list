@@ -5,10 +5,10 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.google.common.base.Optional;
-
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 @Dao
@@ -18,11 +18,11 @@ public interface TaskEntityDao {
     Single<List<Long>> insertTask(TaskEntity... taskEntities);
 
     @Update
-    void updateTasks(TaskEntity taskEntity);
+    Completable updateTasks(TaskEntity taskEntity);
 
     @Query("SELECT * FROM task ORDER BY startDate")
     Single<List<TaskEntity>> selectAllTasks();
 
     @Query("SELECT * FROM task WHERE id = :id")
-    Single<Optional<TaskEntity>> selectTaskByID(int id);
+    Maybe<TaskEntity> selectTaskByID(int id);
 }

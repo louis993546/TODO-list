@@ -2,9 +2,7 @@ package io.github.louistsaitszho.stand_up.core.data;
 
 import androidx.annotation.NonNull;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-import com.google.common.primitives.Ints;
 
 import org.threeten.bp.LocalDate;
 
@@ -17,6 +15,7 @@ import io.github.louistsaitszho.stand_up.core.data.local.TaskEntity;
 import io.github.louistsaitszho.stand_up.core.data.local.TaskEntityDao;
 import io.github.louistsaitszho.stand_up.core.model.Task;
 import io.github.louistsaitszho.stand_up.core.model.TaskState;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 class TaskRepositoryImpl implements TaskRepository {
@@ -49,19 +48,19 @@ class TaskRepositoryImpl implements TaskRepository {
 
     @NonNull
     @Override
-    public Single<Optional<Task>> getTaskByID(int id) {
+    public Maybe<Task> getTaskByID(int id) {
         return null;
     }
 
     @NonNull
     @Override
     public Single<Task> createTask(@NonNull String title, @NonNull LocalDate startDate) {
-        return Single.just(new TaskEntity(title, TaskState.TODO, startDate))
-                .flatMap(dao::insertTask)
-                .map(TaskRepositoryImpl::sanitizeInsertResult)
-                .flatMap(id -> dao.selectTaskByID(Ints.checkedCast(id)))
-                .map(Optional::get)
-                .map(taskEntity -> new Task(taskEntity.id, taskEntity.title, taskEntity.state, taskEntity.startDate));
+//        return Single.just(new TaskEntity(title, TaskState.TODO, startDate))
+//                .flatMap(dao::insertTask)
+//                .map(TaskRepositoryImpl::sanitizeInsertResult)
+//                .flatMapMaybe(id -> dao.selectTaskByID(Ints.checkedCast(id)))
+//                .map(taskEntity -> new Task(taskEntity.id, taskEntity.title, taskEntity.state, taskEntity.startDate));
+        return null;
     }
 
     @NonNull
