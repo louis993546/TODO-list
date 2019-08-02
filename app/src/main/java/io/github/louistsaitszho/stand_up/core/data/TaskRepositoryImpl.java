@@ -1,7 +1,9 @@
 package io.github.louistsaitszho.stand_up.core.data;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 import org.threeten.bp.LocalDate;
@@ -49,29 +51,65 @@ class TaskRepositoryImpl implements TaskRepository {
     @NonNull
     @Override
     public Maybe<Task> getTaskByID(int id) {
-        return null;
+        return dao.selectTaskByID(id).map(taskEntity -> new Task(
+                taskEntity.id,
+                taskEntity.title,
+                taskEntity.state,
+                taskEntity.startDate
+        ));
     }
 
     @NonNull
     @Override
     public Single<Task> createTask(@NonNull String title, @NonNull LocalDate startDate) {
-//        return Single.just(new TaskEntity(title, TaskState.TODO, startDate))
-//                .flatMap(dao::insertTask)
-//                .map(TaskRepositoryImpl::sanitizeInsertResult)
-//                .flatMapMaybe(id -> dao.selectTaskByID(Ints.checkedCast(id)))
-//                .map(taskEntity -> new Task(taskEntity.id, taskEntity.title, taskEntity.state, taskEntity.startDate));
-        return null;
+        return Single.fromCallable(() -> new TaskEntity(
+                Preconditions.checkNotNull(title),
+                TaskState.TODO,
+                Preconditions.checkNotNull(startDate)
+        ))
+                .flatMap(dao::insertTask)
+                .map(idList -> idList.get(0).intValue())
+                .flatMap(id -> dao.selectTaskByID(id).toSingle())
+                .map(taskEntity -> new Task(
+                        taskEntity.id,
+                        taskEntity.title,
+                        taskEntity.state,
+                        taskEntity.startDate
+                ));
     }
 
     @NonNull
     @Override
     public Single<Task> updateTaskState(int id, @NonNull TaskState newTaskState) {
-        return null;
+        if (newTaskState == null)
+            return Single.error(new NullPointerException("newTaskState should not be null"));
+        return updateTask(id, null, newTaskState);
     }
 
     @NonNull
     @Override
     public Single<Task> updateTaskTitle(int id, @NonNull String newTitle) {
-        return null;
+        if (newTitle == null)
+            return Single.error(new NullPointerException("newTitle should not be null"));
+        return updateTask(id, newTitle, null);
+    }
+
+    private Single<Task> updateTask(int id, @Nullable String newTitle, @Nullable TaskState newTaskState) {
+        return dao.selectTaskByID(id)
+                .toSingle()
+                .map(taskEntity -> {
+                    String title = newTitle == null ? taskEntity.title : newTitle;
+                    TaskState state = newTaskState == null ? taskEntity.state : newTaskState;
+                    return new TaskEntity(taskEntity.id, title, state, taskEntity.startDate);
+                })
+                .flatMapCompletable(dao::updateTasks)
+                .andThen(dao.selectTaskByID(id))
+                .toSingle()
+                .map(taskEntity -> new Task(
+                        taskEntity.id,
+                        taskEntity.title,
+                        taskEntity.state,
+                        taskEntity.startDate
+                ));
     }
 }
