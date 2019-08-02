@@ -1,4 +1,4 @@
-package io.github.louistsaitszho.stand_up.feature_task_list;
+package io.github.louistsaitszho.stand_up.feature_task_list.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,7 +18,9 @@ import java.util.List;
 import dagger.android.support.AndroidSupportInjection;
 import io.github.louistsaitszho.stand_up.R;
 import io.github.louistsaitszho.stand_up.core.model.Task;
+import io.github.louistsaitszho.stand_up.core.ui.UniformGapItemDecoration;
 import io.github.louistsaitszho.stand_up.databinding.FragmentTaskListBinding;
+import io.github.louistsaitszho.stand_up.feature_task_list.TaskListViewModel;
 import timber.log.Timber;
 
 public class TaskListFragment extends Fragment {

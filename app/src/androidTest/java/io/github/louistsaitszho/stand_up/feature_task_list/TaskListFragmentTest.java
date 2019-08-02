@@ -6,6 +6,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import io.github.louistsaitszho.stand_up.feature_task_list.ui.TaskListFragment;
+
 @RunWith(AndroidJUnit4.class)
 public class TaskListFragmentTest {
     @Test

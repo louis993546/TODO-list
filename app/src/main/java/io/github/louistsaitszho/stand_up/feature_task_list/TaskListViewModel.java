@@ -14,7 +14,8 @@ import io.github.louistsaitszho.stand_up.core.model.TaskState;
 public class TaskListViewModel extends ViewModel {
 
     private ArrayList<Task> fakeList = new ArrayList<>();
-    MutableLiveData<List<Task>> fakeListLiveData = new MutableLiveData<>();
+    // TODO only expose a non-mutable version
+    public MutableLiveData<List<Task>> fakeListLiveData = new MutableLiveData<>();
 
     public void onButtonAddTaskClicked() {
         fakeList.add(new Task(1, "test", TaskState.TODO, LocalDate.now()));

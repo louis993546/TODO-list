@@ -14,6 +14,7 @@ import timber.log.Timber;
 
 
 public class App extends MultiDexApplication implements HasAndroidInjector {
+
     @Inject
     DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
 
@@ -34,11 +35,15 @@ public class App extends MultiDexApplication implements HasAndroidInjector {
     }
 
     private void initDagger() {
-        DaggerAppComponent.create().inject(this);
+        DaggerAppComponent.builder()
+                .applicationContext(this)
+                .build()
+                .inject(this);
     }
 
     @Override
     public AndroidInjector<Object> androidInjector() {
         return dispatchingAndroidInjector;
     }
+
 }

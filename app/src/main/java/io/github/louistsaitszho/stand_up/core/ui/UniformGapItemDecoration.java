@@ -1,4 +1,4 @@
-package io.github.louistsaitszho.stand_up.feature_task_list;
+package io.github.louistsaitszho.stand_up.core.ui;
 
 import android.graphics.Rect;
 import android.view.View;
@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import timber.log.Timber;
 
-class UniformGapItemDecoration extends RecyclerView.ItemDecoration {
+public class UniformGapItemDecoration extends RecyclerView.ItemDecoration {
 
     private static final String TAG = "UniGapItemDecoration";
 
     private int gapInPixels = 0;
 
-    UniformGapItemDecoration(int gapInPixels) {
+    public UniformGapItemDecoration(int gapInPixels) {
         Timber.tag(TAG).d("gap in pixels = %s", gapInPixels);
         this.gapInPixels = gapInPixels;
     }

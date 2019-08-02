@@ -2,7 +2,7 @@ package io.github.louistsaitszho.stand_up.core.di;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
-import io.github.louistsaitszho.stand_up.core.MainActivity;
+import io.github.louistsaitszho.stand_up.core.ui.MainActivity;
 
 @Module
 abstract class ActivityModule {
